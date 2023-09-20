@@ -46,15 +46,24 @@ const digitButtons = document.querySelectorAll('.digit-buttons');
 digitButtons.forEach(button => button.addEventListener('click', displayDigits));
 
 function displayDigits(e){
-    displayValue.push(e.target.textContent);
+
+    let numValue;
+
+    if(e.type === 'keydown'){
+        numValue = e.key;
+    }else{
+        numValue = e.target.textContent;
+    }
+
+    displayValue.push(numValue);
 
     if(result){
         firstOperand = result.toString();
     }
 
     //ALLOWS ONLY ONE DECIMAL POINT PER OPERAND
-    if(e.target.textContent === '.'){
-        let currPoint = e.target.textContent;
+    if(numValue === '.'){
+        let currPoint = numValue;
 
         if(displayValue.indexOf(currPoint) !== displayValue.lastIndexOf(currPoint)){
             displayValue.splice(displayValue.length - 1, 1);
@@ -70,7 +79,7 @@ function displayDigits(e){
 
         if(expressionArr[arrLength - 1] !== operator){
             clearScreen();
-            firstOperand = e.target.textContent;
+            firstOperand = numValue;
             displayValue.push(firstOperand);
             bottomDisplay.textContent = firstOperand;
             return;
@@ -91,21 +100,29 @@ operatorButtons.forEach(operator => operator.addEventListener('click', addOperat
 
 function addOperator(e){
 
+    let operatorValue;
+
+    if(e.type === 'keydown'){
+        operatorValue = e.key;
+    }else{
+        operatorValue = e.target.textContent;
+    }
+
     if(firstOperandUsed && secondOperandUsed){
         checkForDecimals();
         topDisplay.textContent = result;
     }
 
     if(secondOperandUsed){
-        topDisplay.textContent = result.toString().concat(' ', e.target.textContent);
+        topDisplay.textContent = result.toString().concat(' ', operatorValue);
     } else {
-        topDisplay.textContent = firstOperand.concat(' ', e.target.textContent);
+        topDisplay.textContent = firstOperand.concat(' ', operatorValue);
     }
 
     displayValue.splice(0, displayValue.length);
     bottomDisplay.textContent = result;
     firstOperandUsed = true;
-    operator = e.target.textContent;
+    operator = operatorValue;
 
 }
 
@@ -190,4 +207,30 @@ function deleteNumber(){
     }
 }
 
+window.addEventListener('keydown', pressButton);
 
+function pressButton(e){
+    digitButtons.forEach(button =>{
+        if(button.innerText.includes(`${e.key}`)){
+            displayDigits(e);
+        }
+    });
+    
+    operatorButtons.forEach(button =>{
+        if(button.innerText.includes(`${e.key}`)){
+            addOperator(e);
+        }
+    });
+
+    if(equalButton.innerText.includes(`${e.key}`)){
+        equalsTo();
+    }else if(e.key === 'Enter'){
+        //STOP ENTER KEY FROM TRIGGERING CLICK EVENT
+        e.preventDefault();
+        equalsTo();
+    }
+    
+    if(e.key === 'Backspace'){
+        deleteNumber();
+    }
+}
