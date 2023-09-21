@@ -23,7 +23,6 @@ function divide(operand1, operand2){
 }
 
 function operate(operator, operand1, operand2){
-    
     switch(operator){
         case '+':
             return add(operand1,operand2);
@@ -42,11 +41,7 @@ function operate(operator, operand1, operand2){
 const topDisplay = document.querySelector('.top-display');
 const bottomDisplay = document.querySelector('.bottom-display');
 
-const digitButtons = document.querySelectorAll('.digit-buttons');
-digitButtons.forEach(button => button.addEventListener('click', displayDigits));
-
 function displayDigits(e){
-
     let numValue;
 
     if(e.type === 'keydown'){
@@ -95,11 +90,29 @@ function displayDigits(e){
     }
 }
 
-const operatorButtons = document.querySelectorAll('.operator-buttons');
-operatorButtons.forEach(operator => operator.addEventListener('click', addOperator));
+function checkForDecimals(){
+    if(firstOperand.includes('.') || secondOperand.includes('.')){
+        let answer = (operate(operator, +firstOperand, +secondOperand));
+        let decimalIndex = answer.toString().indexOf('.');
+        let numLength = answer.toString().length;
+        
+        //CHECKS IF THERE ARE MORE THAN 2 NUMBERS AFTER THE DECIMAL AND ROUNDS IF TRUE
+        let maxDistance = 3; 
+
+        result = ((numLength - decimalIndex) > maxDistance) ? answer.toFixed(2) : answer;
+    }else{
+        result = operate(operator, +firstOperand, +secondOperand);
+        if(result.toString().includes('.')){
+            let valHold = result.toFixed(2);
+            result = +valHold;
+        }
+    }
+}
+
+const digitButtons = document.querySelectorAll('.digit');
+digitButtons.forEach(button => button.addEventListener('click', displayDigits));
 
 function addOperator(e){
-
     let operatorValue;
 
     if(e.type === 'keydown'){
@@ -123,14 +136,12 @@ function addOperator(e){
     bottomDisplay.textContent = result;
     firstOperandUsed = true;
     operator = operatorValue;
-
 }
 
-const equalButton = document.querySelector('.equal-button');
-equalButton.addEventListener('click', equalsTo);
+const operatorButtons = document.querySelectorAll('.operator');
+operatorButtons.forEach(operator => operator.addEventListener('click', addOperator));
 
 function equalsTo(){
-    
     //RETURNS ERROR IF BOTH OPERANDS ARENT PRESENT & '=' IS PRESSED
     if(!firstOperandUsed || !secondOperandUsed){
         bottomDisplay.textContent = 'ERROR';
@@ -147,33 +158,10 @@ function equalsTo(){
     checkForDecimals();
     
     bottomDisplay.textContent = result;
-   
 }
 
-function checkForDecimals(){
-
-    if(firstOperand.includes('.') || secondOperand.includes('.')){
-        let answer = (operate(operator, +firstOperand, +secondOperand));
-        let decimalIndex = answer.toString().indexOf('.');
-        let numLength = answer.toString().length;
-        
-        //CHECKS IF THERE ARE MORE THAN 2 NUMBERS AFTER THE DECIMAL
-        //AND ROUNDS IF TRUE
-        let maxDistance = 3; 
-
-        result = ((numLength - decimalIndex) > maxDistance) ? answer.toFixed(2) : answer;
-    }else{
-        result = operate(operator, +firstOperand, +secondOperand);
-        if(result.toString().includes('.')){
-            let valHold = result.toFixed(2);
-            result = +valHold;
-        }
-    }
-}
-
-const clearButton = document.querySelector('.clear-button');
-
-clearButton.addEventListener('click', clearScreen);
+const equalButton = document.querySelector('.equal-button');
+equalButton.addEventListener('click', equalsTo);
 
 function clearScreen(){
     displayValue.splice(0, displayValue.length);
@@ -183,12 +171,12 @@ function clearScreen(){
     result = '';
     firstOperandUsed = false;
     secondOperandUsed = false;
-    bottomDisplay.textContent = 'BOTTOM';
-    topDisplay.textContent = 'TOP';
+    bottomDisplay.textContent = '';
+    topDisplay.textContent = '';
 }
 
-const deleteButton = document.querySelector('.delete-button');
-deleteButton.addEventListener('click', deleteNumber);
+const clearButton = document.querySelector('.clear-button');
+clearButton.addEventListener('click', clearScreen);
 
 function deleteNumber(){
     //DETERMINE WHETHER DELETION SHOULD BE FROM THE FIRST OR SECOND OPERAND
@@ -207,7 +195,8 @@ function deleteNumber(){
     }
 }
 
-window.addEventListener('keydown', pressButton);
+const deleteButton = document.querySelector('.delete-button');
+deleteButton.addEventListener('click', deleteNumber);
 
 function pressButton(e){
     digitButtons.forEach(button =>{
@@ -234,3 +223,5 @@ function pressButton(e){
         deleteNumber();
     }
 }
+
+window.addEventListener('keydown', pressButton);
