@@ -8,41 +8,43 @@
 
     </head>
     <body>
-        <div id="top-display" class="top-display">
-            TOP DISPLAY
-        </div>
-        <div id="bottom-display" class="bottom-display">
-            BOTTOM DISPLAY
-        </div>
+        <div id="calculator" class="calculator-body">
+            <div id="screen-display" class="display">
+                <div id="top-display" class="top-display"></div>
+                <div id="bottom-display" class="bottom-display"></div>
+            </div>
+    
+            <div id="erasers" class="erase-buttons">
+                <button class="clear-button">CLEAR</button>
+                <button class="delete-button">DELETE</button>
+            </div>
 
-        <div id="digits" class="digit-buttons">
-            <button>0</button>
-            <button>1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>4</button>
-            <button>5</button>
-            <button>6</button>
-            <button>7</button>
-            <button>8</button>
-            <button>9</button>
-            <button class="decimal-point">.</button>
+            <div class="button-body">
+                <div id="digits" class="digit-buttons">
+                    <button class="digit">9</button>
+                    <button class="digit">8</button>
+                    <button class="digit">7</button>
+                    <button class="digit">6</button>
+                    <button class="digit">5</button>
+                    <button class="digit">4</button>
+                    <button class="digit">3</button>
+                    <button class="digit">2</button>
+                    <button class="digit">1</button>
+                    <button class="digit">0</button>
+                    <button class="digit decimal-point">.</button>
+                </div>
+        
+                <div id="operators" class="operator-buttons">
+                    <button class="operator">+</button>
+                    <button class="operator">-</button>
+                    <button class="operator">x</button>
+                    <button class="operator">/</button>
+                    <button id="equal" class="equal-button">=</button>
+                </div>
+            </div>
+    
+            
         </div>
-
-        <div id="operators" class="operator-buttons">
-            <button>+</button>
-            <button>-</button>
-            <button>*</button>
-            <button>/</button>
-        </div>
-
-        <div id="equal-sign" class="equal-button">
-            <button>=</button>
-        </div>
-
-        <div id="erasers" class="erase-buttons">
-            <button class="clear-button">CLEAR</button>
-            <button class="delete-button">DELETE</button>
-        </div>
+        
     </body>
 </html>
